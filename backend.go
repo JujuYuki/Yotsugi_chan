@@ -117,11 +117,6 @@ func (bot *BasicBot) HandleChat() error {
 								fmt.Printf("[%s] Unlimited Rulebook: Shutdown.\n", timeStamp())
 								bot.Disconnect()
 								return nil
-							case "test":
-								err = bot.Say("Peace peace!")
-								if nil != err {
-									return err
-								}
 							default:
 								// NOOP
 							}
