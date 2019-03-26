@@ -172,7 +172,6 @@ func (bot *BasicBot) Say(msg string) error {
 	if "" == msg {
 		return errors.New("BasicBot.Say: msg was empty")
 	}
-	fmt.Println("sending message")
 	_, err := bot.conn.Write([]byte(fmt.Sprintf("PRIVMSG #%s :%s\r\n", bot.Channel, msg)))
 	if nil != err {
 		return err
