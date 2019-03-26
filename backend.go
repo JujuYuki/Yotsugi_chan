@@ -123,6 +123,11 @@ func (bot *BasicBot) HandleChat() error {
 								fmt.Printf("[%s] Unlimited Rulebook: Shutdown.\n", timeStamp())
 								bot.Disconnect()
 								return nil
+							case "lost":
+								err = bot.SayLook("Dis-moi où ce trouve le lieu où je souhaite aller.")
+								if nil != err {
+									return err
+								}
 							default:
 								// NOOP
 							}
@@ -135,6 +140,18 @@ func (bot *BasicBot) HandleChat() error {
 							return err
 						}
 					}
+					masuda := strings.Contains(msg, "shinylock") || strings.Contains(msg, "shiny lock")
+					masuda = masuda || strings.Contains(msg, "Shinylock")
+					masuda = masuda || strings.Contains(msg, "ShinyLock")
+					masuda = masuda || strings.Contains(msg, "Shiny lock")
+					masuda = masuda || strings.Contains(msg, "Shiny Lock")
+					if masuda {
+						err = bot.SayLook("/me ne sait pas.")
+						if nil != err {
+							return err
+						}
+					}
+
 				default:
 					// NOOP
 				}
@@ -174,6 +191,17 @@ func (bot *BasicBot) Say(msg string) error {
 		return errors.New("BasicBot.Say: msg was empty")
 	}
 	_, err := bot.conn.Write([]byte(fmt.Sprintf("PRIVMSG #%s :%s\r\n", bot.Channel, msg)))
+	if nil != err {
+		return err
+	}
+	return nil
+}
+
+func (bot *BasicBot) SayLook(msg string) error {
+	if "" == msg {
+		return errors.New("BasicBot.SayLook: msg empty")
+	}
+	_, err := bot.conn.Write([]byte(fmt.Sprintf("PRIVMSG #%s :%s Dis-je avec un regard posé.\r\n", bot.Channel, msg)))
 	if nil != err {
 		return err
 	}
