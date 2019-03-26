@@ -114,6 +114,10 @@ func (bot *BasicBot) HandleChat() error {
 						if userName == bot.Channel || userName == bot.Owner {
 							switch cmd {
 							case "urboff":
+								err = bot.Say("Unlimited Rulebook: Shutdown!")
+								if nil != err {
+									return err
+								}
 								fmt.Printf("[%s] Unlimited Rulebook: Shutdown.\n", timeStamp())
 								bot.Disconnect()
 								return nil
