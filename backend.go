@@ -25,6 +25,7 @@ var cmdRegex *regexp.Regexp = regexp.MustCompile(`^!(\w+)\s?(\w+)?`)
 
 type BasicBot struct {
 	Channel		string
+	Owner		string
 	conn		net.Conn
 	Credentials	*OAuthCred
 	MsgRate		time.Duration
@@ -110,15 +111,27 @@ func (bot *BasicBot) HandleChat() error {
 					if nil != cmdMatches {
 						cmd := cmdMatches[1]
 
-						if userName == bot.Channel {
+						if userName == bot.Channel || userName == bot.Owner {
 							switch cmd {
 							case "urboff":
 								fmt.Printf("[%s] Unlimited Rulebook: Shutdown.\n", timeStamp())
 								bot.Disconnect()
 								return nil
+							case "test":
+								err = bot.Say("Peace peace!")
+								if nil != err {
+									return err
+								}
 							default:
 								// NOOP
 							}
+						}
+					}
+
+					if strings.Contains(msg, "Yotsugi") {
+						err = bot.Say("Yay, onii-chan! Peace peace!")
+						if nil != err {
+							return err
 						}
 					}
 				default:
@@ -136,7 +149,7 @@ func (bot *BasicBot) JoinChannel() {
 	bot.conn.Write([]byte("NICK "+bot.Name+"\r\n"))
 	bot.conn.Write([]byte("JOIN #"+bot.Channel+"\r\n"))
 
-	fmt.Printf("[%s] %s has made contact with #%s! Peace peace !", timeStamp(), bot.Name, bot.Channel)
+	fmt.Printf("[%s] %s has made contact with #%s! Peace peace!", timeStamp(), bot.Name, bot.Channel)
 }
 
 func (bot *BasicBot) ReadCredentials() error {
@@ -159,7 +172,8 @@ func (bot *BasicBot) Say(msg string) error {
 	if "" == msg {
 		return errors.New("BasicBot.Say: msg was empty")
 	}
-	_, err := bot.conn.Write([]byte(fmt.Sprintf("PRIVMSG #%s\r\n", bot.Channel, msg)))
+	fmt.Println("sending message")
+	_, err := bot.conn.Write([]byte(fmt.Sprintf("PRIVMSG #%s :%s\r\n", bot.Channel, msg)))
 	if nil != err {
 		return err
 	}
