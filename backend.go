@@ -11,6 +11,7 @@ import (
 	"net/textproto"
 	"regexp"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -34,6 +35,7 @@ type BasicBot struct {
 	Private		string
 	Server		string
 	startTime	time.Time
+	WaitGroup   *sync.WaitGroup
 }
 
 type OAuthCred struct {
@@ -179,6 +181,7 @@ func (bot *BasicBot) Say(msg string) error {
 }
 
 func (bot *BasicBot) Start() {
+	defer bot.WaitGroup.Done()
 	err := bot.ReadCredentials()
 	if nil != err {
 		fmt.Println(err)
