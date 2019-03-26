@@ -15,7 +15,7 @@ func main() {
 		Private:		"./private/oauth.json",
 		Server:			"irc.chat.twitch.tv",
 	}
-	yotsugi.Start()
+	go yotsugi.Start()
 	yotsugi2 := twitchBot.BasicBot{
 		Channel:		"jujuyuki",
 		Owner:			"jujuyuki",
@@ -25,5 +25,5 @@ func main() {
 		Private:		"./private/oauth.json",
 		Server:			"irc.chat.twitch.tv",
 	}
-	yotsugi2.Start()
+	go yotsugi2.Start()
 }
