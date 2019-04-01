@@ -124,7 +124,7 @@ func (bot *BasicBot) HandleChat() error {
 								bot.Disconnect()
 								return nil
 							case "lost":
-								err = bot.SayLook("Dis-moi où ce trouve le lieu où je souhaite aller.")
+								err = bot.SayLook("Dis-moi où se trouve le lieu où je souhaite aller.")
 								if nil != err {
 									return err
 								}
